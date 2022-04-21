@@ -1,4 +1,4 @@
-$serverFolder = "S" + -join ((65..90) + (97..122) | Get-Random -Count 3 | % {[char]$_})
+$serverFolder = "Server-" + -join ((65..90) + (97..122) | Get-Random -Count 3 | % {[char]$_})
 
 echo "
 ================="
