@@ -11,4 +11,4 @@ iex "& { $(irm https://raw.githubusercontent.com/sxsmc/LL-Ins/main/LLIns.ps1) } 
 ```
 
 ### Linux (Ubuntu, Debian and etc.)
-Coming soon...
+Check [LiteLoaderBDS](https://github.com/LiteLDev/LiteLoaderBDS#docker) repository
