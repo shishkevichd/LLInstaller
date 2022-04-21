@@ -1,6 +1,6 @@
 ![Logo](https://github.com/aye20054925/LiteLoaderWeb/raw/master/src/assets/logo.png)
 # LL-Ins
-Crossplatform LiteLoaderBDS Installer
+Universal LiteLoaderBDS Installer
 
 ## How to run?
 
