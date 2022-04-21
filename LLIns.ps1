@@ -1,5 +1,3 @@
-﻿[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
 $serverFolder = "BDS-" + -join ((65..90) + (97..122) | Get-Random -Count 3 | % {[char]$_})
 
 echo "
