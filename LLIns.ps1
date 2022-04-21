@@ -1,4 +1,4 @@
-$serverFolder = "BDS-" + -join ((65..90) + (97..122) | Get-Random -Count 3 | % {[char]$_})
+$serverFolder = "S" + -join ((65..90) + (97..122) | Get-Random -Count 3 | % {[char]$_})
 
 echo "
 ================="
@@ -10,7 +10,7 @@ echo "=================
 "
 echo "[Info] Create server folder"
 New-Item -Path "." -Name $serverFolder -ItemType "directory" | out-null
-echo "[Info] Your server folder is ${serverFolder}"
+echo "[Info] Your server folder is '${serverFolder}'"
 
 echo "
 [Info] Getting Minecraft Bedrock Dedicated Server URL..."
