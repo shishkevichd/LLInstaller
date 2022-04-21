@@ -1,52 +1,91 @@
-$serverFolder = "Server-" + -join ((65..90) + (97..122) | Get-Random -Count 3 | % {[char]$_})
+clear
+Write-Host "
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-" -ForegroundColor Green
+Write-Host "
+Welcome to LL-Ins. It's universal Minecraft BDS installer.
 
-echo "
-================="
-echo "
-LL-Ins"
-echo "Source: https://github.com/sxsmc/LL-Ins
+Site: https://github.com/sxsmc/LL-Ins
 "
-echo "=================
-"
-echo "[Info] Create server folder"
+Write-Host "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+" -ForegroundColor Green
+Write-Host "[Question] " -NoNewline -ForegroundColor Green
+$needLLPrompt = Read-Host -Prompt "Need to install LiteLoader? (1 is YES, 0 is NO)"
+$needLL = $null;
+
+if ($needLLPrompt -eq 1) {
+    $needLL = $true;
+} else {
+    $needLL = $false;
+}
+
+Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+echo "Creating server folder"
+$serverFolder = "BDS-" + -join ((65..90) + (97..122) | Get-Random -Count 4 | % {[char]$_})
 New-Item -Path "." -Name $serverFolder -ItemType "directory" | out-null
-echo "[Info] Your server folder is '${serverFolder}'"
+Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+echo "Your server folder is '${serverFolder}'"
 
-echo "
-[Info] Getting Minecraft Bedrock Dedicated Server URL..."
+Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+echo "Getting Minecraft Bedrock Dedicated Server URL..."
 
 $bedrockData = Invoke-WebRequest 'https://raw.githubusercontent.com/sxsmc/MCVersion/main/mcversion.json' | ConvertFrom-Json
 $bedrockServerURL = $bedrockData.data.bedrock.fromSite.serverDownloadURL
 
-echo "[Info] Getting LiteLoaderBDS Download URL..."
-$liteloaderReleases = Invoke-WebRequest 'https://api.github.com/repos/LiteLDev/LiteLoaderBDS/releases' | ConvertFrom-Json
-$liteloaderDownloadURL = $liteloaderReleases[0].assets[0].browser_download_url
+if ($needLL) {
+    Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+    echo "Getting LiteLoaderBDS Download URL..."
+    $liteloaderReleases = Invoke-WebRequest 'https://api.github.com/repos/LiteLDev/LiteLoaderBDS/releases' | ConvertFrom-Json
+    $liteloaderDownloadURL = $liteloaderReleases[0].assets[0].browser_download_url
+}
 
-echo "
-[Info] Download Minecraft Bedrock Dedicated Server..."
+Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+echo "Download Minecraft Bedrock Dedicated Server..."
 Invoke-WebRequest -Uri $bedrockServerURL -OutFile "./${serverFolder}/Server.zip"
 
-echo "[Info] Download LiteLoaderBDS..."
-Invoke-WebRequest -Uri $liteloaderDownloadURL -OutFile "./${serverFolder}/LL.zip"
+if ($needLL) {
+    Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+    echo "Download LiteLoaderBDS..."
+    Invoke-WebRequest -Uri $liteloaderDownloadURL -OutFile "./${serverFolder}/LL.zip"
+}
 
-echo "
-[Info] Unzipping your server!"
+Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+echo "Unzipping your server!"
 Expand-Archive -LiteralPath "./${serverFolder}/Server.zip" -DestinationPath "./${serverFolder}"
-Expand-Archive -LiteralPath "./${serverFolder}/LL.zip" -DestinationPath "./${serverFolder}"
+if ($needLL) {
+    Expand-Archive -LiteralPath "./${serverFolder}/LL.zip" -DestinationPath "./${serverFolder}"
+}
 
-echo "
-[Info] Deleting temporary files!"
+Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+echo "Deleting temporary files!"
 Remove-Item -Path "./${serverFolder}/*.zip" -Force -Recurse
 
-echo "
-[Info] Running SymDB.exe."
-
-# Running SymDB.exe and setting LiteLoader
 cd ".\${serverFolder}"
-Start-Process -FilePath ".\SymDB2.exe"
 
-echo "
-[Info] Done! To enable the server, open 'bedrock_server_mod.exe' (if you don't have it, open 'bedrock_server.exe')"
-echo "
-[Info] Goodbye!
-"
+if ($needLL) {
+    Write-Host "
+    [Info] " -NoNewline -ForegroundColor Cyan
+    echo "Running SymDB.exe."
+
+    Start-Process -FilePath ".\SymDB2.exe"
+}
+
+Write-Host "[Question] " -NoNewline -ForegroundColor Green
+$needStartServerPrompt = Read-Host -Prompt "Need to start server? (1 is YES, 0 is NO)"
+$needStartServer = $null;
+
+if ($needStartServerPrompt -eq 1) {
+    $needStartServer = $true;
+} else {
+    $needStartServer = $false;
+}
+
+if ($needStartServer) {
+    if ($needLL) {
+        Start-Process -FilePath ".\bedrock_server_mod.exe"
+    } else {
+        Start-Process -FilePath ".\bedrock_server.exe"
+    }
+}
+
+Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+echo "Done!"
