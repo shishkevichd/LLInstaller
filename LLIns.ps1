@@ -9,13 +9,23 @@ Site: https://github.com/sxsmc/LL-Ins
 Write-Host "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 " -ForegroundColor Green
 Write-Host "[Question] " -NoNewline -ForegroundColor Green
-$needLLPrompt = Read-Host -Prompt "Need to install LiteLoader? (1 is YES, 0 is NO)"
+$needLLPrompt = Read-Host -Prompt "Need to install LiteLoaderBDS? (1 is YES, 0 is NO)"
 $needLL = $null;
 
 if ($needLLPrompt -eq 1) {
     $needLL = $true;
 } else {
     $needLL = $false;
+}
+
+Write-Host "[Question] " -NoNewline -ForegroundColor Green
+$needLatestPrompt = Read-Host -Prompt "Need to install LATEST version LiteLoaderBDS and BDS? (1 is YES, 0 is NO)"
+$needLatest = $null;
+
+if ($needLatestPrompt -eq 1) {
+    $needLatest = $true;
+} else {
+    $needLatest = $false;
 }
 
 Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
@@ -29,23 +39,63 @@ Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
 echo "Getting Minecraft Bedrock Dedicated Server URL..."
 
 $bedrockData = Invoke-WebRequest 'https://raw.githubusercontent.com/sxsmc/MCVersion/main/mcversion.json' | ConvertFrom-Json
-$bedrockServerURL = $bedrockData.data.bedrock.fromSite.serverDownloadURL
+$bedrockServerURL = $null
+if (!$needLatest) {
+    Write-Host "[Question] " -NoNewline -ForegroundColor Green
+    $customBedrockVersion = Read-Host -Prompt "What version of Minecraft BDS do you need (example: 1.18.30.04)"
+
+    if ($customBedrockVersion) {
+        $bedrockServerURL = "https://minecraft.azureedge.net/bin-win/bedrock-server-${customBedrockVersion}.zip"
+    } else {
+        Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+        echo "Exit!"
+        exit
+    }
+} else {
+    $bedrockServerURL = $bedrockData.data.bedrock.fromSite.serverDownloadURL
+}
 
 if ($needLL) {
     Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
     echo "Getting LiteLoaderBDS Download URL..."
     $liteloaderReleases = Invoke-WebRequest 'https://api.github.com/repos/LiteLDev/LiteLoaderBDS/releases' | ConvertFrom-Json
-    $liteloaderDownloadURL = $liteloaderReleases[0].assets[0].browser_download_url
+    $liteloaderDownloadURL = $null
+    if (!$needLatest) {
+        Write-Host "[Question] " -NoNewline -ForegroundColor Green
+        $customLLVersion = Read-Host -Prompt "What version of LiteLoaderBDS do you need (example: 2.1.8)"
+
+        if ($customLLVersion) {
+            $liteloaderDownloadURL = "https://github.com/LiteLDev/LiteLoaderBDS/releases/download/${customLLVersion}/LiteLoader-${customLLVersion}.zip"
+        } else {
+            Write-Host "[Error] " -NoNewline -ForegroundColor Red
+            echo "Exit!"
+            exit
+        }
+    } else {
+        $liteloaderDownloadURL = $liteloaderReleases[0].assets[0].browser_download_url
+    }
 }
 
 Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
 echo "Download Minecraft Bedrock Dedicated Server..."
-Invoke-WebRequest -Uri $bedrockServerURL -OutFile "./${serverFolder}/Server.zip"
+try {
+    Invoke-WebRequest -Uri $bedrockServerURL -OutFile "./${serverFolder}/Server.zip"
+} catch {
+    Write-Host "[Error] " -NoNewline -ForegroundColor Red
+    echo "BDS version not found. Requested URL: ${bedrockServerURL}"
+    exit
+}
 
 if ($needLL) {
     Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
     echo "Download LiteLoaderBDS..."
-    Invoke-WebRequest -Uri $liteloaderDownloadURL -OutFile "./${serverFolder}/LL.zip"
+    try {
+        Invoke-WebRequest -Uri $liteloaderDownloadURL -OutFile "./${serverFolder}/LL.zip"
+    } catch {
+        Write-Host "[Error] " -NoNewline -ForegroundColor Red
+        echo "LiteLoaderBDS version not found. Requested URL: ${liteloaderDownloadURL}"
+        exit
+    }
 }
 
 Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
