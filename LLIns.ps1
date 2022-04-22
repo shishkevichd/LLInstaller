@@ -112,28 +112,21 @@ Remove-Item -Path "./${serverFolder}/*.zip" -Force -Recurse
 cd ".\${serverFolder}"
 
 if ($needLL) {
-    Write-Host "
-    [Info] " -NoNewline -ForegroundColor Cyan
-    echo "Running SymDB.exe."
+    Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
+    echo "Try to run LLPeEditor.exe."
 
-    Start-Process -FilePath ".\SymDB2.exe"
-}
-
-Write-Host "[Question] " -NoNewline -ForegroundColor Green
-$needStartServerPrompt = Read-Host -Prompt "Need to start server? (1 is YES, 0 is NO)"
-$needStartServer = $null;
-
-if ($needStartServerPrompt -eq 1) {
-    $needStartServer = $true;
-} else {
-    $needStartServer = $false;
-}
-
-if ($needStartServer) {
-    if ($needLL) {
-        Start-Process -FilePath ".\bedrock_server_mod.exe"
-    } else {
-        Start-Process -FilePath ".\bedrock_server.exe"
+    try {
+        Start-Process -FilePath ".\LLPeEditor.exe"
+    } catch {
+        try {
+            Write-Host "[Warning] " -NoNewline -ForegroundColor Yellow
+            echo "LLPeEditor.exe not found. Try to run SymDB2.exe."
+            Start-Process -FilePath ".\SymDB2.exe"
+        } catch {
+            Write-Host "[Error] " -NoNewline -ForegroundColor Red
+            echo "Failed to install LiteLoaderBDS properly."
+            exit
+        }
     }
 }
 
