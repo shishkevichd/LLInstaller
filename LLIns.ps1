@@ -52,7 +52,7 @@ if (!$needLatest) {
         exit
     }
 } else {
-    $bedrockServerURL = $bedrockData.data.bedrock.fromSite.serverDownloadURL
+    $bedrockServerURL = $bedrockData.data.bedrock.serverDownloadURL
 }
 
 if ($needLL) {
