@@ -1,4 +1,4 @@
-![Logo](https://github.com/aye20054925/LiteLoaderWeb/raw/master/src/assets/logo.png)
+![Logo](https://docs.litebds.com/assets/LL-Logo.png)
 # LL-Ins
 Universal Minecraft BDS Installer
 
@@ -7,7 +7,7 @@ Universal Minecraft BDS Installer
 ### Windows
 Open Powershell and run:
 ```powershell 
-iex "& { $(irm https://raw.githubusercontent.com/sxsmc/LL-Ins/main/LLIns.ps1) } -UseMSI -Preview"
+iex "& { $(irm https://raw.githubusercontent.com/aye20054925/LL-Ins/main/LLIns.ps1) } -UseMSI -Preview"
 ```
 
 ### Linux (Ubuntu, Debian and etc.)
