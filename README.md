@@ -1,4 +1,5 @@
-![Logo](https://docs.litebds.com/assets/LL-Logo.png)
+<img src='https://docs.litebds.com/assets/LL-Logo.png' width='45px'/>
+
 # LL-Ins
 Universal Minecraft BDS Installer
 
