@@ -4,7 +4,7 @@ Write-Host "
 Write-Host "
 Welcome to LL-Ins. It's universal Minecraft BDS installer.
 
-Site: https://github.com/sxsmc/LL-Ins
+Site: https://github.com/aye20054925/LL-Ins
 "
 Write-Host "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 " -ForegroundColor Green
