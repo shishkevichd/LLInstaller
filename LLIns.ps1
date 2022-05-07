@@ -35,10 +35,6 @@ New-Item -Path "." -Name $serverFolder -ItemType "directory" | out-null
 Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
 echo "Your server folder is '${serverFolder}'"
 
-Write-Host "[Info] " -NoNewline -ForegroundColor Cyan
-echo "Getting Minecraft Bedrock Dedicated Server URL..."
-
-$bedrockData = Invoke-WebRequest 'https://raw.githubusercontent.com/sxsmc/MCVersion/main/mcversion.json' | ConvertFrom-Json
 $bedrockServerURL = $null
 if (!$needLatest) {
     Write-Host "[Question] " -NoNewline -ForegroundColor Green
@@ -52,7 +48,7 @@ if (!$needLatest) {
         exit
     }
 } else {
-    $bedrockServerURL = $bedrockData.data.bedrock.serverDownloadURL
+    $bedrockServerURL = "https://minecraft.azureedge.net/bin-win/bedrock-server-1.18.32.02.zip"
 }
 
 if ($needLL) {
