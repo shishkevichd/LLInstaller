@@ -4,7 +4,7 @@ Write-Host "
 Write-Host "
 Welcome to LL-Ins. It's universal Minecraft BDS installer.
 
-Site: https://github.com/aye20054925/LL-Ins
+Site: https://github.com/aye20054925/LLInstaller
 "
 Write-Host "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 " -ForegroundColor Green
@@ -48,7 +48,7 @@ if (!$needLatest) {
         exit
     }
 } else {
-    $bedrockServerURL = "https://minecraft.azureedge.net/bin-win/bedrock-server-1.18.32.02.zip"
+    $bedrockServerURL = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/LiteLDev/LiteLoaderBDS/main/Scripts/LINK.txt").Content
 }
 
 if ($needLL) {
